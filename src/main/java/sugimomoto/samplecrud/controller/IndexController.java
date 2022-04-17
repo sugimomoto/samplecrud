@@ -3,8 +3,10 @@ package sugimomoto.samplecrud.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sugimomoto.samplecrud.model.SleepParameter;
 import sugimomoto.samplecrud.util.PropertyFileManager;
 import sugimomoto.withings4j.WithingsAPIClient;
 import sugimomoto.withings4j.WithingsOAuthClient;
@@ -12,6 +14,9 @@ import sugimomoto.withings4j.model.*;
 import sugimomoto.withings4j.query.SleepGetQueryParameters;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Controller
 public class IndexController {
@@ -46,11 +51,20 @@ public class IndexController {
     }
 
     @GetMapping("/sleepsummary")
-    public String sleepSummaryList(Model model){
+    public String sleepSummaryList(@ModelAttribute SleepParameter parameter, Model model){
         SleepGetQueryParameters param = new SleepGetQueryParameters();
-        param.setStartDate(1641740400);
-        param.setEndDate(1641826800);
         param.setDataFileds("hr,rr");
+
+        if(parameter == null){
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime before1week = now.minusWeeks(1);
+
+            param.setStartDate((int)before1week.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+            param.setEndDate((int)now.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+        }else{
+            param.setStartDate((int)parameter.getStartDate().atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+            param.setEndDate((int)parameter.getEndDate().atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+        }
 
         try {
             SleepBase sleepBase =  apiClient.sleepGet(param);

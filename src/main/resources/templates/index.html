@@ -19,6 +19,27 @@
 
         <h2>Sleep data summary</h2>
 
+        <form th:action="@{/sleepsummary}" th:object="${}"
+              method="post" novalidate>
+            <div class="mb-3">
+                <label>Start Date</label>
+                <input type="date" class="form-control"
+                       th:errorclass="is-invalid" th:field="*{startDate}">
+            </div>
+
+
+            <div class="mb-3">
+                <label>End Date</label>
+                <input type="date" class="form-control"
+                       th:errorclass="is-invalid" th:field="*{endDate}">
+            </div>
+
+            <button class="w-100 btn btn-primary btn-lg"
+                    type="submit" th:text="#{register}">
+            </button>
+        </form>
+
+
         <table class="table table-bordered">
             <thead>
             <tr>
