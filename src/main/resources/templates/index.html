@@ -3,18 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+
 </head>
 <body>
-  <h1 th:text="${title}"></h1>
+<div class="container-fluid">
+    <main class="offcanvas-outside bg-light">
+        <h1 th:text="${title}"></h1>
 
+        <a th:href="${url}">Authorize Withings API</a>
 
+        <h2>Sleep data summary</h2>
 
-  <li>
-      <ol>Message: <p th:text="${message}"></p></ol>
-      <ol>AuthorizationUrl: <a th:href="${url}">link</a></ol>
-      <ol>Token: <p th:text="${token}"></p></ol>
-      <ol>Sleep: <p th:text="${sleep}"></p></ol>
-  </li>
-
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>model</th>
+                <th>startdate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="summary : ${sleeplist}">
+                <tr>
+                    <td>[[${summary.model}]]</td>
+                    <td>[[${summary.startdate}]]</td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </main>
+</div>
 </body>
 </html>

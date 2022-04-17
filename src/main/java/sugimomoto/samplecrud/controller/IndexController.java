@@ -54,7 +54,7 @@ public class IndexController {
 
         try {
             SleepBase sleepBase =  apiClient.sleepGet(param);
-            model.addAttribute("sleep",sleepBase.getBody().getSeries().get(0).getHr());
+            model.addAttribute("sleeplist",sleepBase.getBody().getSeries());
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("error",e.getMessage());
