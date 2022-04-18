@@ -55,16 +55,11 @@ public class IndexController {
         SleepGetQueryParameters param = new SleepGetQueryParameters();
         param.setDataFileds("hr,rr");
 
-        if(parameter == null){
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime before1week = now.minusWeeks(1);
+        LocalDateTime now = parameter.getEndDate() == null ? LocalDateTime.now() : parameter.getEndDate();
+        LocalDateTime before1week = parameter.getStartDate() == null ? now.minusWeeks(1) : parameter.getStartDate();
 
-            param.setStartDate((int)before1week.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
-            param.setEndDate((int)now.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
-        }else{
-            param.setStartDate((int)parameter.getStartDate().atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
-            param.setEndDate((int)parameter.getEndDate().atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
-        }
+        param.setStartDate((int)before1week.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+        param.setEndDate((int)now.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
 
         try {
             SleepBase sleepBase =  apiClient.sleepGet(param);
@@ -74,7 +69,7 @@ public class IndexController {
             model.addAttribute("error",e.getMessage());
         }
 
-        return "index";
+        return "sleep";
     }
 
     @GetMapping("/callback")
