@@ -15,18 +15,18 @@
     <main class="offcanvas-outside bg-light">
         <h2>Sleep data summary</h2>
 
-        <form th:action="@{/sleepsummary}" th:object="${sleepparameter}"
+        <form th:action="@{/sleepsummary}" th:object="${sleepParameter}"
               method="post" novalidate>
             <div class="mb-3">
                 <label>Start Date</label>
-                <input type="date" class="form-control"
+                <input type="datetime-local" class="form-control"
                        th:errorclass="is-invalid" th:field="*{startDate}">
             </div>
 
 
             <div class="mb-3">
                 <label>End Date</label>
-                <input type="date" class="form-control"
+                <input type="datetime-local" class="form-control"
                        th:errorclass="is-invalid" th:field="*{endDate}">
             </div>
 

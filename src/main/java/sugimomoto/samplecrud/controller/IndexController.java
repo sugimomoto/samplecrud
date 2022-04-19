@@ -51,7 +51,30 @@ public class IndexController {
     }
 
     @GetMapping("/sleepsummary")
-    public String sleepSummaryList(@ModelAttribute SleepParameter parameter, Model model){
+    public String sleepSummaryList(@ModelAttribute SleepParameter parameter,Model model){
+        SleepGetQueryParameters param = new SleepGetQueryParameters();
+        param.setDataFileds("hr,rr");
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime before1week = now.minusWeeks(1);
+
+        param.setStartDate((int)before1week.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+        param.setEndDate((int)now.atZone(ZoneOffset.ofHours(+9)).toEpochSecond());
+
+        try {
+            SleepBase sleepBase =  apiClient.sleepGet(param);
+            model.addAttribute("sleeplist",sleepBase.getBody().getSeries());
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("error",e.getMessage());
+        }
+
+        return "sleep";
+    }
+
+
+    @PostMapping("/sleepsummary")
+    public String sleepSearch(@ModelAttribute SleepParameter parameter, Model model){
         SleepGetQueryParameters param = new SleepGetQueryParameters();
         param.setDataFileds("hr,rr");
 
